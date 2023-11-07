@@ -1,5 +1,6 @@
 import 'package:desafio_tecnico/core/services/local_db_service/local_db_service.dart';
 import 'package:desafio_tecnico/stores/auth_store.dart';
+import 'package:desafio_tecnico/stores/todo_store.dart';
 import 'package:desafio_tecnico/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -16,10 +17,10 @@ void main() {
 
 setup() {
   GetIt getIt = GetIt.instance;
-
   getIt.registerSingletonAsync<LocalDbService>(
       () async => await SharedPreferencesService.initialize());
   getIt.registerLazySingleton<AuthStore>(() => AuthStore(getIt()));
+  getIt.registerLazySingleton<TodoStore>(() => TodoStore(getIt()));
 }
 
 class MyApp extends StatelessWidget {
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
         home: const SplashScreen(),
         routes: {
           '/login': (context) => LoginScreen(authStore: GetIt.instance()),
-          '/todo': (context) => const TodoScreen(),
+          '/todo': (context) => TodoScreen(todoStore: GetIt.instance()),
         });
   }
 }

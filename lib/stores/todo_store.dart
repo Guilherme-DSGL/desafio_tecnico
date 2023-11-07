@@ -30,15 +30,12 @@ abstract class TodoStoreBase with Store {
   }
 
   @action
-  saveTodo(Todo todo) {
-    listTodo.add(todo);
-    _localDbService.insertListString(
+  saveTodo(String text) async {
+    await _localDbService.insertListString(
         key: kTodo, value: Todo.listToJsonList(listTodo));
+    listTodo.add(Todo(title: text));
   }
 
   @action
-  deleteTodo() {}
-
-  @action
-  updateTodo() {}
+  deleteTodo(Todo todo) {}
 }

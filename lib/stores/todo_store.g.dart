@@ -33,6 +33,14 @@ mixin _$TodoStore on TodoStoreBase, Store {
     });
   }
 
+  late final _$saveTodoAsyncAction =
+      AsyncAction('TodoStoreBase.saveTodo', context: context);
+
+  @override
+  Future saveTodo(String text) {
+    return _$saveTodoAsyncAction.run(() => super.saveTodo(text));
+  }
+
   late final _$TodoStoreBaseActionController =
       ActionController(name: 'TodoStoreBase', context: context);
 
@@ -48,33 +56,11 @@ mixin _$TodoStore on TodoStoreBase, Store {
   }
 
   @override
-  dynamic saveTodo(Todo todo) {
-    final _$actionInfo = _$TodoStoreBaseActionController.startAction(
-        name: 'TodoStoreBase.saveTodo');
-    try {
-      return super.saveTodo(todo);
-    } finally {
-      _$TodoStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic deleteTodo() {
+  dynamic deleteTodo(Todo todo) {
     final _$actionInfo = _$TodoStoreBaseActionController.startAction(
         name: 'TodoStoreBase.deleteTodo');
     try {
-      return super.deleteTodo();
-    } finally {
-      _$TodoStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic updateTodo() {
-    final _$actionInfo = _$TodoStoreBaseActionController.startAction(
-        name: 'TodoStoreBase.updateTodo');
-    try {
-      return super.updateTodo();
+      return super.deleteTodo(todo);
     } finally {
       _$TodoStoreBaseActionController.endAction(_$actionInfo);
     }

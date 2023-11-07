@@ -8,6 +8,7 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
       body: Container(
         width: MediaQuery.sizeOf(context).width,
+        height: MediaQuery.sizeOf(context).height,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF1E4E62), Color(0xFF2D958E)],
