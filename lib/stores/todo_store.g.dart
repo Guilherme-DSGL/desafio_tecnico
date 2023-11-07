@@ -9,13 +9,75 @@ part of 'todo_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$TodoStore on TodoStoreBase, Store {
-  Computed<String?>? _$itemsDescriptionComputed;
+  Computed<bool>? _$isTodoTitleValidComputed;
 
   @override
-  String? get itemsDescription => (_$itemsDescriptionComputed ??=
-          Computed<String?>(() => super.itemsDescription,
-              name: 'TodoStoreBase.itemsDescription'))
+  bool get isTodoTitleValid => (_$isTodoTitleValidComputed ??= Computed<bool>(
+          () => super.isTodoTitleValid,
+          name: 'TodoStoreBase.isTodoTitleValid'))
       .value;
+  Computed<bool>? _$isSelectTodoComputed;
+
+  @override
+  bool get isSelectTodo =>
+      (_$isSelectTodoComputed ??= Computed<bool>(() => super.isSelectTodo,
+              name: 'TodoStoreBase.isSelectTodo'))
+          .value;
+  Computed<bool>? _$isFormValidComputed;
+
+  @override
+  bool get isFormValid =>
+      (_$isFormValidComputed ??= Computed<bool>(() => super.isFormValid,
+              name: 'TodoStoreBase.isFormValid'))
+          .value;
+
+  late final _$todoTitleAtom =
+      Atom(name: 'TodoStoreBase.todoTitle', context: context);
+
+  @override
+  String get todoTitle {
+    _$todoTitleAtom.reportRead();
+    return super.todoTitle;
+  }
+
+  @override
+  set todoTitle(String value) {
+    _$todoTitleAtom.reportWrite(value, super.todoTitle, () {
+      super.todoTitle = value;
+    });
+  }
+
+  late final _$selectedToEditAtom =
+      Atom(name: 'TodoStoreBase.selectedToEdit', context: context);
+
+  @override
+  Todo? get selectedToEdit {
+    _$selectedToEditAtom.reportRead();
+    return super.selectedToEdit;
+  }
+
+  @override
+  set selectedToEdit(Todo? value) {
+    _$selectedToEditAtom.reportWrite(value, super.selectedToEdit, () {
+      super.selectedToEdit = value;
+    });
+  }
+
+  late final _$isBusyAtom =
+      Atom(name: 'TodoStoreBase.isBusy', context: context);
+
+  @override
+  bool get isBusy {
+    _$isBusyAtom.reportRead();
+    return super.isBusy;
+  }
+
+  @override
+  set isBusy(bool value) {
+    _$isBusyAtom.reportWrite(value, super.isBusy, () {
+      super.isBusy = value;
+    });
+  }
 
   late final _$listTodoAtom =
       Atom(name: 'TodoStoreBase.listTodo', context: context);
@@ -33,6 +95,14 @@ mixin _$TodoStore on TodoStoreBase, Store {
     });
   }
 
+  late final _$editTodoAsyncAction =
+      AsyncAction('TodoStoreBase.editTodo', context: context);
+
+  @override
+  Future editTodo() {
+    return _$editTodoAsyncAction.run(() => super.editTodo());
+  }
+
   late final _$saveTodoAsyncAction =
       AsyncAction('TodoStoreBase.saveTodo', context: context);
 
@@ -41,8 +111,49 @@ mixin _$TodoStore on TodoStoreBase, Store {
     return _$saveTodoAsyncAction.run(() => super.saveTodo(text));
   }
 
+  late final _$deleteTodoAsyncAction =
+      AsyncAction('TodoStoreBase.deleteTodo', context: context);
+
+  @override
+  Future deleteTodo(Todo todo) {
+    return _$deleteTodoAsyncAction.run(() => super.deleteTodo(todo));
+  }
+
   late final _$TodoStoreBaseActionController =
       ActionController(name: 'TodoStoreBase', context: context);
+
+  @override
+  dynamic setTodoTitle(String todoTitle) {
+    final _$actionInfo = _$TodoStoreBaseActionController.startAction(
+        name: 'TodoStoreBase.setTodoTitle');
+    try {
+      return super.setTodoTitle(todoTitle);
+    } finally {
+      _$TodoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setSelectedToEdit(Todo todo) {
+    final _$actionInfo = _$TodoStoreBaseActionController.startAction(
+        name: 'TodoStoreBase.setSelectedToEdit');
+    try {
+      return super.setSelectedToEdit(todo);
+    } finally {
+      _$TodoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic submitForm() {
+    final _$actionInfo = _$TodoStoreBaseActionController.startAction(
+        name: 'TodoStoreBase.submitForm');
+    try {
+      return super.submitForm();
+    } finally {
+      _$TodoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic fetchTodoList() {
@@ -56,21 +167,15 @@ mixin _$TodoStore on TodoStoreBase, Store {
   }
 
   @override
-  dynamic deleteTodo(Todo todo) {
-    final _$actionInfo = _$TodoStoreBaseActionController.startAction(
-        name: 'TodoStoreBase.deleteTodo');
-    try {
-      return super.deleteTodo(todo);
-    } finally {
-      _$TodoStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
+todoTitle: ${todoTitle},
+selectedToEdit: ${selectedToEdit},
+isBusy: ${isBusy},
 listTodo: ${listTodo},
-itemsDescription: ${itemsDescription}
+isTodoTitleValid: ${isTodoTitleValid},
+isSelectTodo: ${isSelectTodo},
+isFormValid: ${isFormValid}
     ''';
   }
 }
