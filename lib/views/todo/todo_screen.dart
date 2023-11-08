@@ -31,8 +31,7 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   void dispose() {
-    _editingController.dispose();
-    focus.dispose();
+    _dispose();
     super.dispose();
   }
 
@@ -41,6 +40,11 @@ class _TodoScreenState extends State<TodoScreen> {
     focus.addListener(() {
       focus.requestFocus();
     });
+  }
+
+  _dispose() {
+    _editingController.dispose();
+    focus.dispose();
   }
 
   _submit(e) {

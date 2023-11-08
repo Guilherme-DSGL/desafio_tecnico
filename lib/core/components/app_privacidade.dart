@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppPrivacidade extends StatelessWidget {
   const AppPrivacidade({
@@ -12,7 +13,13 @@ class AppPrivacidade extends StatelessWidget {
       child: Align(
         alignment: Alignment.center,
         child: TextButton(
-          onPressed: () {},
+          onPressed: () async {
+            final url = Uri.parse(
+                'https://www.google.com'); // Coloca a URL que desejas abrir
+            if (await canLaunchUrl(url)) {
+              await launchUrl(url);
+            }
+          },
           child: const Text(
             "Políticas de Privacidade",
             style: TextStyle(color: Colors.white),
