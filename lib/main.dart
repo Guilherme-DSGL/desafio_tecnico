@@ -9,16 +9,16 @@ import 'core/services/local_db_service/shared_prederence_service.dart';
 import 'views/spash_screen.dart';
 import 'views/todo/todo_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setup();
+  await setup();
   runApp(const MyApp());
 }
 
-setup() {
+setup() async {
   GetIt getIt = GetIt.instance;
-  getIt.registerSingletonAsync<LocalDbService>(
-      () async => await SharedPreferencesService.initialize());
+  final prefs = await SharedPreferencesService.initialize();
+  getIt.registerSingleton<LocalDbService>(prefs);
   getIt.registerLazySingleton<AuthStore>(() => AuthStore(getIt()));
   getIt.registerLazySingleton<TodoStore>(() => TodoStore(getIt()));
 }
@@ -32,10 +32,19 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2D958E)),
-          useMaterial3: true,
-        ),
-        home: const SplashScreen(),
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: const Color(0xFF2D958E)),
+            useMaterial3: true,
+            inputDecorationTheme: const InputDecorationTheme(
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+              counterStyle: TextStyle(color: Colors.white),
+              filled: true,
+              border: OutlineInputBorder(),
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF44BD6D)))),
+        home: SplashScreen(authStore: GetIt.instance()),
         routes: {
           '/login': (context) => LoginScreen(authStore: GetIt.instance()),
           '/todo': (context) => TodoScreen(todoStore: GetIt.instance()),

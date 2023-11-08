@@ -18,9 +18,9 @@ abstract class AuthStoreBase with Store {
     return _user;
   }
 
-  bool isAuthenticated() {
-    return _user?.value != null;
-  }
+  bool get isAuthenticated => _user?.value != null;
+
+  bool get isRequestPedding => _user?.status == FutureStatus.pending;
 
   @action
   ObservableFuture<User> authenticate(String userName, String password) =>
