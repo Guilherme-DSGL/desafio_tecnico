@@ -52,8 +52,8 @@ class AppTextFormField extends StatelessWidget {
         ),
         validator: validator,
         onFieldSubmitted: (e) {
-          formFieldKey.currentState?.validate();
           onFieldSubmitted?.call(e);
+          formFieldKey.currentState?.validate();
         });
   }
 }

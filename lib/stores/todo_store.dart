@@ -1,6 +1,6 @@
 import 'package:desafio_tecnico/core/constants/keys.dart';
 import 'package:desafio_tecnico/core/services/local_db_service/local_db_service.dart';
-import 'package:flutter/material.dart';
+import 'package:desafio_tecnico/stores/todo_form_store.dart';
 import 'package:mobx/mobx.dart';
 
 import '../models/todo.dart';
@@ -12,67 +12,25 @@ abstract class TodoStoreBase with Store {
   final LocalDbService _localDbService;
   TodoStoreBase(this._localDbService);
 
-  late TextEditingController editingController;
-  final key = GlobalKey<FormFieldState>();
-  @observable
-  String todoTitle = "";
-
-  @observable
-  Todo? selectedToEdit;
-
-  @observable
-  bool isBusy = false;
-
-  @action
-  setTodoTitle(String todoTitle) => this.todoTitle = todoTitle;
-  @action
-  setSelectedToEdit(Todo todo) {
-    setTodoTitle(todo.title);
-    updateEdditingController(todo.title);
-    selectedToEdit = todo;
-  }
-
-  updateEdditingController(String title) {
-    editingController.clear();
-
-    editingController.value = editingController.value.copyWith(
-      text: title,
-      selection: TextSelection.fromPosition(
-        TextPosition(offset: title.length),
-      ),
-    );
-  }
-
-  String? validateTodoTitle(String? s) {
-    if (!isTodoTitleValid) {
-      return "Digite um Texto";
-    }
-    return null;
-  }
-
-  @computed
-  bool get isTodoTitleValid => todoTitle.isNotEmpty;
-
-  @computed
-  bool get isSelectTodo =>
-      selectedToEdit != null && listTodo.contains(selectedToEdit);
-
-  @computed
-  bool get isFormValid => isTodoTitleValid;
+  final formTodo = TodoFormStore();
 
   @action
   submitForm() {
-    if (!isFormValid) {
+    if (!formTodo.isFormValid) {
+      formTodo.setTodoTitle("");
       return;
     }
-    if (isSelectTodo) {
+    if (formTodo.isSelectTodo && listTodo.contains(formTodo.selectedToEdit)) {
       editTodo();
-      todoTitle = "";
+      formTodo.todoTitle = null;
     } else {
-      saveTodo(todoTitle);
-      todoTitle = "";
+      saveTodo(formTodo.todoTitle!);
+      formTodo.todoTitle = null;
     }
   }
+
+  @observable
+  bool isBusy = false;
 
   @observable
   ObservableList<Todo> listTodo = ObservableList<Todo>();
@@ -87,9 +45,9 @@ abstract class TodoStoreBase with Store {
 
   @action
   editTodo() async {
-    int i = listTodo.indexOf(selectedToEdit);
+    int i = listTodo.indexOf(formTodo.selectedToEdit);
     if (i != -1) {
-      listTodo[i] = Todo(title: todoTitle);
+      listTodo[i] = Todo(title: formTodo.todoTitle!);
       await _localDbService
           .insertListString(key: kTodo, value: Todo.listToJsonList(listTodo))
           .then((value) => listTodo);
@@ -108,7 +66,7 @@ abstract class TodoStoreBase with Store {
   @action
   deleteTodo(Todo todo) async {
     isBusy = true;
-    listTodo.removeWhere((element) => todo.hashCode == element.hashCode);
+    listTodo.removeWhere((element) => todo == element);
     await _localDbService.insertListString(
         key: kTodo, value: Todo.listToJsonList(listTodo));
     isBusy = false;

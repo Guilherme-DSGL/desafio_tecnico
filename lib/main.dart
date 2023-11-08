@@ -7,7 +7,7 @@ import 'package:get_it/get_it.dart';
 
 import 'core/services/local_db_service/shared_prederence_service.dart';
 import 'views/spash_screen.dart';
-import 'views/todo_screen.dart';
+import 'views/todo/todo_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
