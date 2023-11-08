@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
             return reaction((p0) => widget.authStore.isAuthenticated,
                 (isAuthenticated) {
               if (isAuthenticated) {
-                Navigator.pushNamed(context, "/todo");
+                Navigator.pushNamed(context, "/login");
               } else {
                 Navigator.pushNamed(context, "/login");
               }

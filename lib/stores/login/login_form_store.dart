@@ -49,12 +49,12 @@ abstract class LoginFormStoreBase with Store {
   @action
   void validateName(String name) {
     if (name.isEmpty) {
-      errorState.name = "Não pode estar vazio";
+      errorState.name = "O nome não pode estar vazio";
       return;
     }
 
     if (name.length > 20) {
-      errorState.name = "Não pode ser maior que 20 caracteres";
+      errorState.name = "O nome não pode ser maior que 20 caracteres";
       return;
     }
     errorState.name = null;
@@ -63,15 +63,15 @@ abstract class LoginFormStoreBase with Store {
   @action
   void validatePassword(String password) {
     if (password.isEmpty) {
-      errorState.password = "Não pode estar vazio";
+      errorState.password = "A senha não pode estar vazia";
       return;
     }
     if (password.length > 20) {
-      errorState.password = "Não pode ser maior que 20 caracteres";
+      errorState.password = "A senha não pode ser maior que 20 caracteres";
       return;
     }
     if (!dennySpecialCaracteres.hasMatch(password)) {
-      errorState.password = "Valor inválido";
+      errorState.password = "A senha não pode conter caracteres especiais";
       return;
     }
     errorState.password = null;
