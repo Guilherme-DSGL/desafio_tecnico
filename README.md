@@ -5,7 +5,8 @@
 
 O desafio consistia salvar informações em um base de dados em memória. Seguindo alguns critérios preestabelecidos.
 
-![c](https://github.com/Guilherme-DSGL/desafio_tecnico/assets/72310683/e4986739-c46a-409c-a577-0b1be959a089)
+![c](https://github.com/Guilherme-DSGL/desafio_tecnico/assets/72310683/ea3e794e-4120-4c7b-8551-63e8ffe5e179)
+
 
 A base de dados utlizada foi:
 
