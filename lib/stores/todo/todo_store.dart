@@ -1,9 +1,9 @@
 import 'package:desafio_tecnico/core/constants/keys.dart';
 import 'package:desafio_tecnico/core/services/local_db_service/local_db_service.dart';
-import 'package:desafio_tecnico/stores/todo_form_store.dart';
+import 'package:desafio_tecnico/stores/todo/form/todo_form_store.dart';
 import 'package:mobx/mobx.dart';
 
-import '../models/todo.dart';
+import '../../models/todo.dart';
 part 'todo_store.g.dart';
 
 class TodoStore = TodoStoreBase with _$TodoStore;
@@ -16,16 +16,12 @@ abstract class TodoStoreBase with Store {
 
   @action
   submitForm() {
-    if (!formTodo.isFormValid) {
-      formTodo.setTodoTitle("");
-      return;
-    }
-    if (formTodo.isSelectTodo && listTodo.contains(formTodo.selectedToEdit)) {
+    if (isValidForUpdate) {
       editTodo();
-      formTodo.todoTitle = null;
+      formTodo.resetForm();
     } else {
-      saveTodo(formTodo.todoTitle!);
-      formTodo.todoTitle = null;
+      saveTodo(formTodo.todoTitle);
+      formTodo.resetForm();
     }
   }
 
@@ -34,6 +30,10 @@ abstract class TodoStoreBase with Store {
 
   @observable
   ObservableList<Todo> listTodo = ObservableList<Todo>();
+
+  @computed
+  bool get isValidForUpdate =>
+      formTodo.isSelectedTodo && listTodo.contains(formTodo.selectedToEdit);
 
   @action
   fetchTodoList() {
@@ -47,7 +47,7 @@ abstract class TodoStoreBase with Store {
   editTodo() async {
     int i = listTodo.indexOf(formTodo.selectedToEdit);
     if (i != -1) {
-      listTodo[i] = Todo(title: formTodo.todoTitle!);
+      listTodo[i] = Todo(title: formTodo.todoTitle);
       await _localDbService
           .insertListString(key: kTodo, value: Todo.listToJsonList(listTodo))
           .then((value) => listTodo);

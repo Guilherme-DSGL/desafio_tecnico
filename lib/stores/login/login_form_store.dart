@@ -24,7 +24,7 @@ abstract class LoginFormStoreBase with Store {
   }
 
   @action
-  void setName(String name) => this.name = name.trimRight().trimLeft();
+  void setName(String name) => this.name = name.trim();
 
   @action
   void setPassword(String password) => this.password = password.trim();

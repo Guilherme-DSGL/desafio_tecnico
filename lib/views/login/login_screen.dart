@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 
-import '../core/components/app_scaffold.dart';
+import '../../core/components/app_scaffold.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required AuthStore authStore})

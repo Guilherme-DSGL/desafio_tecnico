@@ -1,12 +1,13 @@
 import 'package:desafio_tecnico/core/services/local_db_service/local_db_service.dart';
+import 'package:desafio_tecnico/core/theme/theme.dart';
 import 'package:desafio_tecnico/stores/auth_store.dart';
-import 'package:desafio_tecnico/stores/todo_store.dart';
-import 'package:desafio_tecnico/views/login_screen.dart';
+import 'package:desafio_tecnico/stores/todo/todo_store.dart';
+import 'package:desafio_tecnico/views/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import 'core/services/local_db_service/shared_prederence_service.dart';
-import 'views/spash_screen.dart';
+import 'views/splash/spash_screen.dart';
 import 'views/todo/todo_screen.dart';
 
 void main() async {
@@ -31,19 +32,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme: ThemeData(
-            colorScheme:
-                ColorScheme.fromSeed(seedColor: const Color(0xFF2D958E)),
-            useMaterial3: true,
-            inputDecorationTheme: const InputDecorationTheme(
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              counterStyle: TextStyle(color: Colors.white),
-              filled: true,
-              border: OutlineInputBorder(),
-            ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF44BD6D)))),
+        theme: AppTheme.theme,
         home: SplashScreen(authStore: GetIt.instance()),
         routes: {
           '/login': (context) => LoginScreen(authStore: GetIt.instance()),
