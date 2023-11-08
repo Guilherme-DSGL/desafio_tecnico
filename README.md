@@ -1,16 +1,31 @@
-# desafio_tecnico
+# Captura de informações
 
-A new Flutter project.
 
-## Getting Started
+## O Desafio
 
-This project is a starting point for a Flutter application.
+O desafio consistia salvar informações em um base de dados em memória.
 
-A few resources to get you started if this is your first Flutter project:
+![c](https://github.com/Guilherme-DSGL/desafio_tecnico/assets/72310683/e4986739-c46a-409c-a577-0b1be959a089)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+A base de dados utlizada foi:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Shared Preferences
+
+## Clonando o projeto 💻
+
+Para rodar o projeto use os seguintes comandos
+> O projeto foi desenvolvido para as plataformas Android e IOS.
+
+```bash
+# Clonar o repositório
+$ git clone https://github.com/Guilherme-DSGL/desafio_tecnico.git
+
+# Instalar pacotes
+$ flutter clean ; flutter pub get
+```
+## Dependências ✔
+
+* [x] Flutter
+* [x] SharedPreferences
+* [x] MobX
+* [x] Url Launcher
