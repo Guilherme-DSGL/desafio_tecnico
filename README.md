@@ -30,3 +30,20 @@ $ flutter clean ; flutter pub get
 * [x] SharedPreferences
 * [x] MobX
 * [x] Url Launcher
+
+## Desenvolvedor
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Guilherme-DSGL">
+        <img src="https://avatars.githubusercontent.com/u/72310683?s=400&u=9f0ec757e6df46288a0bff579b2648b151319db7&v=4" width="100px;" alt="Kauê Sena"/><br>
+        <sub>
+          <b>Guilherme de Souza</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
+</table>
+
+Obrigado pela sua atenção.
