@@ -3,7 +3,7 @@
 
 ## O Desafio
 
-O desafio consistia salvar informações em um base de dados em memória.
+O desafio consistia salvar informações em um base de dados em memória. Seguindo alguns critérios pre-estabelecidos.
 
 ![c](https://github.com/Guilherme-DSGL/desafio_tecnico/assets/72310683/e4986739-c46a-409c-a577-0b1be959a089)
 
