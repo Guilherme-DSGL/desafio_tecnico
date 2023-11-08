@@ -1,6 +1,7 @@
 import 'package:desafio_tecnico/core/services/local_db_service/local_db_service.dart';
 import 'package:desafio_tecnico/core/theme/theme.dart';
 import 'package:desafio_tecnico/stores/auth_store.dart';
+import 'package:desafio_tecnico/stores/login/login_form_store.dart';
 import 'package:desafio_tecnico/stores/todo/todo_store.dart';
 import 'package:desafio_tecnico/views/login/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ setup() async {
   getIt.registerSingleton<LocalDbService>(prefs);
   getIt.registerLazySingleton<AuthStore>(() => AuthStore(getIt()));
   getIt.registerLazySingleton<TodoStore>(() => TodoStore(getIt()));
+  getIt.registerLazySingleton<LoginFormStore>(() => LoginFormStore());
 }
 
 class MyApp extends StatelessWidget {
@@ -35,7 +37,10 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.theme,
         home: SplashScreen(authStore: GetIt.instance()),
         routes: {
-          '/login': (context) => LoginScreen(authStore: GetIt.instance()),
+          '/login': (context) => LoginScreen(
+                authStore: GetIt.instance(),
+                loginFormStore: GetIt.instance(),
+              ),
           '/todo': (context) => TodoScreen(todoStore: GetIt.instance()),
         });
   }

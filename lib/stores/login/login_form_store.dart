@@ -7,7 +7,9 @@ class LoginFormStore = LoginFormStoreBase with _$LoginFormStore;
 abstract class LoginFormStoreBase with Store {
   final errorState = LoginFormErrorState();
 
-  final onlyCaracteresAndNumbers = RegExp(r'([a-zA-Z0-9])');
+  final allowCaracteresAndNumbers = RegExp(r'[a-zA-Z0-9]');
+
+  final dennySpecialCaracteres = RegExp(r'^[a-zA-Z0-9]+$');
 
   @observable
   String name = '';
@@ -16,7 +18,7 @@ abstract class LoginFormStoreBase with Store {
   String password = '';
 
   @observable
-  bool obscurePassword = false;
+  bool obscurePassword = true;
 
   @action
   void changeObscurePassword() {
@@ -68,7 +70,7 @@ abstract class LoginFormStoreBase with Store {
       errorState.password = "Não pode ser maior que 20 caracteres";
       return;
     }
-    if (onlyCaracteresAndNumbers.hasMatch(password)) {
+    if (!dennySpecialCaracteres.hasMatch(password)) {
       errorState.password = "Valor inválido";
       return;
     }

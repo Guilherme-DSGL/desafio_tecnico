@@ -1,6 +1,7 @@
 import 'package:desafio_tecnico/core/components/app_scaffold.dart';
 import 'package:desafio_tecnico/stores/todo/todo_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../core/components/app_privacidade.dart';
@@ -16,7 +17,7 @@ class TodoScreen extends StatefulWidget {
   State<TodoScreen> createState() => _TodoScreenState();
 }
 
-class _TodoScreenState extends State<TodoScreen> {
+class _TodoScreenState extends State<TodoScreen> with WidgetsBindingObserver {
   late FocusNode focus;
   late TextEditingController _editingController;
 
@@ -27,12 +28,24 @@ class _TodoScreenState extends State<TodoScreen> {
     focus = FocusNode();
     _setup();
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     _dispose();
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      Future.delayed(const Duration(seconds: 1)).then(
+          (value) => SystemChannels.textInput.invokeMethod('TextInput.show'));
+    }
   }
 
   _setup() {

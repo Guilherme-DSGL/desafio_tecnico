@@ -9,27 +9,30 @@ import 'package:mobx/mobx.dart';
 import '../../core/components/app_scaffold.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key, required AuthStore authStore})
-      : _authStore = authStore;
+  const LoginScreen(
+      {super.key,
+      required AuthStore authStore,
+      required LoginFormStore loginFormStore})
+      : _loginFormStore = loginFormStore,
+        _authStore = authStore;
 
   final AuthStore _authStore;
-
+  final LoginFormStore _loginFormStore;
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  LoginFormStore loginFormStore = LoginFormStore();
   late ReactionDisposer disposer;
   @override
   void initState() {
-    loginFormStore.setupValidations();
+    widget._loginFormStore.setupValidations();
     super.initState();
   }
 
   @override
   void dispose() {
-    loginFormStore.dispose();
+    widget._loginFormStore.dispose();
     super.dispose();
   }
 
@@ -39,6 +42,14 @@ class _LoginScreenState extends State<LoginScreen> {
     disposer = reaction((_) => widget._authStore.isAuthenticated, (loggedIn) {
       Navigator.popAndPushNamed(context, "/todo");
     });
+  }
+
+  _submit() {
+    widget._loginFormStore.validateAll();
+    if (!widget._loginFormStore.errorState.hasErrors) {
+      widget._authStore.authenticate(
+          widget._loginFormStore.name, widget._loginFormStore.password);
+    }
   }
 
   @override
@@ -69,14 +80,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Observer(builder: (_) {
                     return TextFormField(
+                      autofocus: true,
+                      textInputAction: TextInputAction.next,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      onChanged: loginFormStore.setName,
+                      onChanged: widget._loginFormStore.setName,
                       readOnly: widget._authStore.isRequestPedding,
                       maxLength: 20,
                       decoration: InputDecoration(
-                        errorText: loginFormStore.errorState.name,
+                        errorText: widget._loginFormStore.errorState.name,
                         prefixIcon: const Icon(Icons.person),
                       ),
+                      onFieldSubmitted: (e) {
+                        widget._loginFormStore
+                            .validateName(widget._loginFormStore.name);
+                      },
                     );
                   }),
                   const SizedBox(
@@ -90,26 +107,30 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Observer(builder: (_) {
                     return TextFormField(
-                      onChanged: loginFormStore.setPassword,
+                      textInputAction: TextInputAction.done,
+                      onChanged: widget._loginFormStore.setPassword,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       maxLength: 20,
                       readOnly: widget._authStore.isRequestPedding,
-                      obscureText: loginFormStore.obscurePassword,
+                      obscureText: widget._loginFormStore.obscurePassword,
                       decoration: InputDecoration(
-                        errorText: loginFormStore.errorState.password,
+                        errorText: widget._loginFormStore.errorState.password,
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                             onPressed: () {
-                              loginFormStore.changeObscurePassword();
+                              widget._loginFormStore.changeObscurePassword();
                             },
-                            icon: loginFormStore.obscurePassword
+                            icon: widget._loginFormStore.obscurePassword
                                 ? const Icon(Icons.visibility_off_outlined)
                                 : const Icon(Icons.visibility_outlined)),
                       ),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
-                            loginFormStore.onlyCaracteresAndNumbers)
+                            widget._loginFormStore.allowCaracteresAndNumbers)
                       ],
+                      onFieldSubmitted: (e) {
+                        _submit();
+                      },
                     );
                   }),
                   const SizedBox(height: 30),
@@ -120,12 +141,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 175,
                       child: Observer(builder: (_) {
                         return ElevatedButton(
-                          onPressed: () async {
-                            loginFormStore.validateAll();
-                            if (!loginFormStore.errorState.hasErrors) {
-                              widget._authStore.authenticate(
-                                  loginFormStore.name, loginFormStore.password);
-                            }
+                          onPressed: () {
+                            _submit();
                           },
                           child: Visibility(
                             visible: !widget._authStore.isRequestPedding,
